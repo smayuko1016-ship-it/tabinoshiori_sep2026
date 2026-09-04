@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>大阪⇄釜山 旅のしおり</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FAF6ED;
+    --paper-alt:#F1EADA;
+    --card:#FFFDF8;
+    --ink:#1F2A30;
+    --ink-soft:#5B6670;
+    --navy:#16323F;
+    --teal:#3E7C82;
+    --brass:#C99A3C;
+    --coral:#D65A3D;
+    --line:#DDD3BC;
+    --radius:14px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Zen Kaku Gothic New', sans-serif;
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.serif{
+    font-family:'Shippori Mincho', serif;
+  }
+  a{color:var(--teal);}
+  .wrap{
+    max-width:640px;
+    margin:0 auto;
+    padding:0 0 64px;
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    background:var(--navy);
+    color:#F5EFDF;
+    padding:36px 24px 28px;
+    position:relative;
+    overflow:hidden;
+    border-bottom:3px solid var(--brass);
+  }
+  .hero .kicker{
+    font-size:13px;
+    letter-spacing:.04em;
+    color:#C7D6D8;
+    margin:0 0 6px;
+  }
+  .hero h1{
+    font-size:34px;
+    font-weight:800;
+    margin:0 0 4px;
+    line-height:1.25;
+  }
+  .hero .sub{
+    font-size:14.5px;
+    color:#DCE6E4;
+    margin:0 0 22px;
+  }
+  .route{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin:20px 0 22px;
+  }
+  .route .city{
+    font-family:'Shippori Mincho',serif;
+    font-size:17px;
+    font-weight:700;
+  }
+  .route svg{flex:1;min-width:60px;}
+  .route .ship{
+    animation:sail 2.2s ease-in-out .3s 1;
+  }
+  @media (prefers-reduced-motion:reduce){
+    .route .ship{animation:none;}
+  }
+  @keyframes sail{
+    from{transform:translateX(0);}
+    to{transform:translateX(0);}
+  }
+  .passengers{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-top:4px;
+  }
+  .chip{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    background:rgba(245,239,223,.1);
+    border:1px solid rgba(245,239,223,.28);
+    border-radius:999px;
+    padding:5px 12px 5px 6px;
+    font-size:13px;
+  }
+  .chip .dot{
+    width:20px;height:20px;border-radius:50%;
+    background:var(--brass);
+    color:var(--navy);
+    font-size:11px;font-weight:700;
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Shippori Mincho',serif;
+  }
+
+  /* ---------- USAGE NOTE ---------- */
+  .howto{
+    margin:18px 20px 0;
+    background:var(--paper-alt);
+    border:1px dashed var(--line);
+    border-radius:var(--radius);
+    padding:12px 16px;
+    font-size:12.5px;
+    color:var(--ink-soft);
+  }
+  .howto b{color:var(--ink);}
+
+  /* ---------- DAY TABS ---------- */
+  .tabs{
+    display:flex;
+    gap:8px;
+    overflow-x:auto;
+    padding:20px 20px 4px;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+  }
+  .tabs::-webkit-scrollbar{display:none;}
+  .tab{
+    flex:0 0 auto;
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:12px 12px 4px 4px;
+    padding:9px 14px 8px;
+    cursor:pointer;
+    text-align:center;
+    position:relative;
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .tab .n{
+    font-family:'Shippori Mincho',serif;
+    font-weight:700;
+    font-size:15px;
+    color:var(--navy);
+    display:block;
+  }
+  .tab .d{
+    font-size:10.5px;
+    color:var(--ink-soft);
+    display:block;
+    margin-top:2px;
+  }
+  .tab.active{
+    background:var(--navy);
+    border-color:var(--navy);
+  }
+  .tab.active .n{color:#F5EFDF;}
+  .tab.active .d{color:#B9CBCA;}
+  .tab.active{box-shadow:0 4px 10px rgba(22,50,63,.25);}
+
+  /* ---------- DAY PANEL ---------- */
+  .day{
+    display:none;
+    padding:18px 20px 0;
+  }
+  .day.active{display:block;}
+  .day-head{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    border-bottom:2px solid var(--navy);
+    padding-bottom:8px;
+    margin-bottom:16px;
+  }
+  .day-head h2{
+    font-size:20px;
+    margin:0;
+    color:var(--navy);
+  }
+  .day-head .wk{
+    font-size:12.5px;
+    color:var(--ink-soft);
+  }
+
+  .sort-row{
+    display:flex;
+    justify-content:flex-end;
+    margin-bottom:8px;
+  }
+  .sort-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    font-size:11.5px;
+    color:var(--brass);
+    background:none;
+    border:1px solid var(--brass);
+    border-radius:999px;
+    padding:5px 12px;
+    cursor:pointer;
+    font-family:inherit;
+  }
+  .sort-btn:hover{background:rgba(201,154,60,.1);}
+  .sort-btn:active{transform:scale(.97);}
+
+  .events{
+    list-style:none;
+    margin:0;
+    padding:0;
+    position:relative;
+  }
+  .events::before{
+    content:"";
+    position:absolute;
+    left:44px;
+    top:6px;
+    bottom:6px;
+    width:1px;
+    background:var(--line);
+  }
+  .ev{
+    display:grid;
+    grid-template-columns:44px 1fr;
+    gap:0 14px;
+    padding:10px 0;
+    position:relative;
+  }
+  .ev .time{
+    font-family:'Zen Kaku Gothic New',sans-serif;
+    font-weight:700;
+    font-size:12.5px;
+    color:var(--navy);
+    font-variant-numeric:tabular-nums;
+    padding-top:2px;
+    outline:none;
+    border-radius:4px;
+  }
+  .ev .time:focus{background:var(--paper-alt);}
+  .ev .dotmark{
+    position:absolute;
+    left:41px;
+    top:15px;
+    width:7px;height:7px;
+    border-radius:50%;
+    background:var(--brass);
+    border:2px solid var(--paper);
+  }
+  .ev-card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:11px 13px;
+  }
+  .ev .place{
+    font-weight:700;
+    font-size:14.5px;
+    outline:none;
+    border-radius:4px;
+  }
+  .ev .place:focus{background:var(--paper-alt);}
+  .ev .memo{
+    font-size:12.5px;
+    color:var(--ink-soft);
+    margin-top:4px;
+    outline:none;
+    border-radius:4px;
+    min-height:1em;
+  }
+  .ev .memo:focus{background:var(--paper-alt);}
+  .ev .memo a{word-break:break-all;}
+  .ev-tools{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    margin-top:8px;
+  }
+  .btn-mini{
+    display:inline-flex;
+    align-items:center;
+    gap:4px;
+    font-size:11.5px;
+    color:var(--teal);
+    background:none;
+    border:1px solid var(--teal);
+    border-radius:999px;
+    padding:4px 10px;
+    cursor:pointer;
+    font-family:inherit;
+  }
+  .btn-mini:hover{background:rgba(62,124,130,.08);}
+  .btn-order{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:24px;height:24px;
+    border:1px solid var(--line);
+    background:var(--paper);
+    color:var(--ink-soft);
+    border-radius:6px;
+    cursor:pointer;
+    padding:0;
+  }
+  .btn-order:hover{border-color:var(--brass);color:var(--brass);}
+  .btn-order:disabled{opacity:.3;cursor:default;}
+  .btn-del{
+    margin-left:auto;
+    border:none;
+    background:none;
+    color:var(--coral);
+    cursor:pointer;
+    font-size:16px;
+    line-height:1;
+    padding:2px 4px;
+    opacity:.65;
+  }
+  .btn-del:hover{opacity:1;}
+
+  .add-row{
+    width:100%;
+    margin-top:10px;
+    border:1.5px dashed var(--line);
+    background:none;
+    color:var(--ink-soft);
+    border-radius:var(--radius);
+    padding:10px;
+    font-size:13px;
+    cursor:pointer;
+    font-family:inherit;
+  }
+  .add-row:hover{border-color:var(--brass);color:var(--brass);}
+
+  /* ---------- MAP ---------- */
+  .mapbox{
+    margin-top:16px;
+    border-radius:var(--radius);
+    overflow:hidden;
+    border:1px solid var(--line);
+    background:var(--paper-alt);
+  }
+  .mapbox .maplabel{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-size:12px;
+    color:var(--ink-soft);
+    padding:9px 13px;
+    border-bottom:1px solid var(--line);
+  }
+  .mapbox .maplabel b{color:var(--ink);font-weight:700;}
+  .mapbox iframe{
+    width:100%;
+    height:220px;
+    border:0;
+    display:block;
+  }
+
+  footer{
+    text-align:center;
+    font-size:11.5px;
+    color:var(--ink-soft);
+    padding:30px 20px 0;
+  }
+
+  svg.icon{width:13px;height:13px;flex:none;}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div class="hero">
+    <p class="kicker">TRAVEL ITINERARY · 2026</p>
+    <h1>大阪 ⇄ 釜山<br>弾丸クルーズ旅</h1>
+    <p class="sub">9月18日(金) 〜 9月22日(火)・4泊5日</p>
+
+    <div class="route">
+      <span class="city">OSAKA</span>
+      <svg viewBox="0 0 100 20" class="ship">
+        <line x1="0" y1="10" x2="100" y2="10" stroke="#C99A3C" stroke-width="1.4" stroke-dasharray="3 4"/>
+        <g transform="translate(46,3)">
+          <path d="M0 10 L14 10 L11 15 L3 15 Z" fill="#F5EFDF"/>
+          <rect x="5.5" y="4" width="3" height="6" fill="#F5EFDF"/>
+          <path d="M8.5 4 L13 8 L8.5 8 Z" fill="#F5EFDF"/>
+        </g>
+      </svg>
+      <span class="city">BUSAN</span>
+    </div>
+
+    <div class="passengers">
+      <span class="chip"><span class="dot">さ</span>さきこ</span>
+      <span class="chip"><span class="dot">ゆ</span>ゆか</span>
+      <span class="chip"><span class="dot">ま</span>まゆこ</span>
+      <span class="chip"><span class="dot">わ</span>わたし</span>
+    </div>
+  </div>
+
+  <div class="howto">
+    <b>使い方：</b>時間・内容・メモはタップして直接編集できます。「＋予定を追加」で行を増やし、✕で削除。▲▼ボタンで手動に順番を入れ替え、「時間順に並び替え」で時刻をもとに自動整列できます。地図がない予定は「地図を追加」から場所名や住所を入力すると地図が表示され、以後は「変更」ボタンで検索キーワードを変更・削除できます。編集内容はこのページを開いている間のみ有効です。
+  </div>
+
+  <div class="tabs" id="tabs"></div>
+  <div id="days"></div>
+
+  <footer>大阪 ⇄ 釜山 旅のしおり ・ さきこ / ゆか / まゆこ / わたし</footer>
+</div>
+
+<script>
+const ICON_PIN = '<svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C7.6 2 4 5.6 4 10c0 6 8 12 8 12s8-6 8-12c0-4.4-3.6-8-8-8zm0 11a3 3 0 110-6 3 3 0 010 6z"/></svg>';
+const ICON_PLUS = '<svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6z"/></svg>';
+const ICON_UP = '<svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 7l6 7H6z"/></svg>';
+const ICON_DOWN = '<svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17l-6-7h12z"/></svg>';
+const ICON_SORT = '<svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4v13.2L3.6 13.8 2.2 15.2 7 20l4.8-4.8-1.4-1.4L7 17.2V4zm10 16V6.8l3.4 3.4 1.4-1.4L17 4l-4.8 4.8 1.4 1.4L17 6.8V20z"/></svg>';
+const ICON_EDIT = '<svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 000-1.41l-2.34-2.34a1 1 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>';
+
+function timeKey(text){
+  text = (text || '').trim();
+  const m = text.match(/(\d{1,2}):(\d{2})/);
+  if(m){ return parseInt(m[1],10)*60 + parseInt(m[2],10); }
+  if(text.includes('朝')) return 5*60;
+  if(text.includes('深夜')) return 27*60;
+  if(text === '-' || text === '') return 9999;
+  return 9998;
+}
+
+const days = [
+  {
+    date:'2026-09-18',
+    title:'大阪 出航日',
+    defaultMap:'大阪港国際フェリーターミナル',
+    events:[
+      {time:'朝', place:'各自大阪に集合', memo:''},
+      {time:'11:00', place:'ランチ｜ケーニヒスクローネ（ヒルトンプラザ）', memo:'<a href="https://www.hiltonplaza.com/shop/detail/ケーニヒスクローネ.html" target="_blank" rel="noopener">店舗ページ</a>', map:'ヒルトンプラザ大阪 ケーニヒスクローネ'},
+      {time:'15:00', place:'コスモスクエア駅 到着', memo:'', map:'コスモスクエア駅'},
+      {time:'15:10', place:'無料シャトルバスで大阪港国際フェリーターミナルへ', memo:'', map:'大阪港国際フェリーターミナル'},
+      {time:'17:00', place:'出港', memo:'いよいよ釜山へ！', map:'大阪港国際フェリーターミナル'}
+    ]
+  },
+  {
+    date:'2026-09-19',
+    title:'釜山 到着日',
+    defaultMap:'釜山港国際旅客ターミナル',
+    events:[
+      {time:'11:00', place:'釜山港 到着・入国審査', memo:'', map:'부산항국제여객터미널'},
+      {time:'12:00', place:'ホテル移動｜Urbanstay Haeundae Station', memo:'', map:'Urbanstay Haeundae Station Busan'},
+      {time:'13:00', place:'お昼ご飯｜ミポチプ', memo:'', map:'미포집 해운대'},
+      {time:'14:00', place:'そのへんウロウロ', memo:''},
+      {time:'17:30', place:'クルーズ乗船', memo:'乗船場所：広安里海洋レポーツセンター（Gwangalli Ocean Leports Center）', map:'광안리 해양레포츠센터'},
+      {time:'19:00', place:'夜ご飯', memo:'お店未定・要検討'}
+    ]
+  },
+  {
+    date:'2026-09-20',
+    title:'釜山観光ツアー',
+    defaultMap:'해운대역',
+    events:[
+      {time:'8:20', place:'ツアー集合', memo:'集合場所：海雲台駅 5番出口', map:'해운대역 5번출구'},
+      {time:'8:30', place:'尾浦ブルーラインパーク 到着', memo:'', map:'해운대블루라인파크 미포역'},
+      {time:'9:00-9:30', place:'スカイカプセル乗車', memo:'尾浦駅 → 青沙浦駅（約30分）', map:'청사포역'},
+      {time:'10:00', place:'五六島スカイウォーク', memo:'', map:'오륙도 스카이워크'},
+      {time:'11:30', place:'ヒンヨウル文化村', memo:'', map:'흰여울문화마을'},
+      {time:'13:00', place:'昼食｜チャガルチ市場', memo:'自由行動。各自でお取りください。ガイドの案内に従い 14:20 集合。', map:'자갈치시장'},
+      {time:'14:40', place:'甘川文化村', memo:'', map:'감천문화마을'},
+      {time:'16:00', place:'釜山駅へ出発', memo:''},
+      {time:'16:20', place:'釜山駅 到着', memo:'', map:'부산역'},
+      {time:'16:40', place:'西面駅 到着', memo:'', map:'서면역'},
+      {time:'17:20', place:'海雲台駅 到着', memo:'', map:'해운대역'},
+      {time:'18:00', place:'シグニエル釜山 チェックイン', memo:'', map:'시그니엘 부산'},
+      {time:'19:00', place:'夜ご飯｜ポッサム', memo:'お店未定'}
+    ]
+  },
+  {
+    date:'2026-09-21',
+    title:'釜山フリーデー',
+    defaultMap:'해운대역',
+    events:[
+      {time:'8:00', place:'ホテルで朝ごはん', memo:''},
+      {time:'9:30', place:'シグニエル釜山 チェックアウト', memo:'', map:'시그니엘 부산'},
+      {time:'10:00', place:'ミッフィカフェ？', memo:'候補地、未確定', map:'미피카페 해운대'},
+      {time:'11:00', place:'市場の冷麺', memo:'3日目に食べられなければこちらで', map:'자갈치시장'},
+      {time:'12:00', place:'どこかウロウロ', memo:'カフェ・パン屋さんなど探索'},
+      {time:'21:00', place:'夜ご飯｜焼肉', memo:''},
+      {time:'深夜', place:'Urbanstay Haeundae Station に戻る', memo:'', map:'Urbanstay Haeundae Station Busan'}
+    ]
+  },
+  {
+    date:'2026-09-22',
+    title:'帰国日',
+    defaultMap:'김해국제공항',
+    events:[
+      {time:'6:30', place:'ホテル出発', memo:'', map:'Urbanstay Haeundae Station Busan'},
+      {time:'7:30', place:'空港 到着', memo:'', map:'김해국제공항'},
+      {time:'9:20', place:'KE2129｜釜山 → 成田', memo:''},
+      {time:'-', place:'東京到着後 解散', memo:'おつかれさまでした！'}
+    ]
+  }
+];
+
+const tabsEl = document.getElementById('tabs');
+const daysEl = document.getElementById('days');
+const wkFmt = new Intl.DateTimeFormat('ja-JP', {month:'numeric', day:'numeric', weekday:'short'});
+
+function mapUrl(query){
+  return 'https://www.google.com/maps?q=' + encodeURIComponent(query) + '&output=embed';
+}
+
+days.forEach((day, di) => {
+  // tab
+  const tab = document.createElement('div');
+  tab.className = 'tab' + (di===0 ? ' active' : '');
+  tab.dataset.day = di;
+  const d = new Date(day.date + 'T00:00:00');
+  tab.innerHTML = `<span class="n">${di+1}日目</span><span class="d">${wkFmt.format(d)}</span>`;
+  tab.addEventListener('click', () => showDay(di));
+  tabsEl.appendChild(tab);
+
+  // panel
+  const panel = document.createElement('section');
+  panel.className = 'day' + (di===0 ? ' active' : '');
+  panel.id = 'day-' + di;
+
+  const head = document.createElement('div');
+  head.className = 'day-head';
+  head.innerHTML = `<h2>${di+1}日目｜${day.title}</h2><span class="wk">${wkFmt.format(d)}</span>`;
+  panel.appendChild(head);
+
+  const sortRow = document.createElement('div');
+  sortRow.className = 'sort-row';
+  sortRow.innerHTML = `<button class="sort-btn">${ICON_SORT}時間順に並び替え</button>`;
+  panel.appendChild(sortRow);
+
+  const ul = document.createElement('ul');
+  ul.className = 'events';
+  panel.appendChild(ul);
+
+  function refreshOrderButtons(){
+    const items = Array.from(ul.children);
+    items.forEach((li, i) => {
+      const up = li.querySelector('.btn-up');
+      const down = li.querySelector('.btn-down');
+      if(up) up.disabled = (i === 0);
+      if(down) down.disabled = (i === items.length - 1);
+    });
+  }
+
+  sortRow.querySelector('.sort-btn').addEventListener('click', () => {
+    const items = Array.from(ul.children);
+    const scored = items.map((li, i) => ({
+      li, i,
+      key: timeKey(li.querySelector('.time').textContent)
+    }));
+    scored.sort((a, b) => (a.key - b.key) || (a.i - b.i));
+    scored.forEach(s => ul.appendChild(s.li));
+    refreshOrderButtons();
+  });
+
+  const mapbox = document.createElement('div');
+  mapbox.className = 'mapbox';
+  mapbox.innerHTML = `<div class="maplabel">${ICON_PIN}<span>表示中：<b class="maplabel-b">${day.defaultMap}</b></span></div>
+    <iframe loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="${mapUrl(day.defaultMap)}"></iframe>`;
+
+  function setMap(query, label){
+    mapbox.querySelector('iframe').src = mapUrl(query);
+    mapbox.querySelector('.maplabel-b').textContent = label;
+  }
+
+  function addEventRow(ev){
+    const li = document.createElement('li');
+    li.className = 'ev';
+    li.dataset.mapQuery = ev.map || '';
+    li.innerHTML = `
+      <span class="time" contenteditable="true">${ev.time || ''}</span>
+      <div class="dotmark"></div>
+      <div class="ev-card">
+        <div class="place" contenteditable="true">${ev.place || ''}</div>
+        <div class="memo" contenteditable="true">${ev.memo || ''}</div>
+        <div class="ev-tools">
+          <button class="btn-mini map-btn">${ICON_PIN}${ev.map ? '地図' : '地図を追加'}</button>
+          <button class="btn-mini edit-map-btn" ${ev.map ? '' : 'style="display:none;"'}>${ICON_EDIT}変更</button>
+          <button class="btn-order btn-up" title="上へ">${ICON_UP}</button>
+          <button class="btn-order btn-down" title="下へ">${ICON_DOWN}</button>
+          <button class="btn-del" title="削除">✕</button>
+        </div>
+      </div>`;
+    const mapBtn = li.querySelector('.map-btn');
+    const editMapBtn = li.querySelector('.edit-map-btn');
+
+    mapBtn.addEventListener('click', () => {
+      if(!li.dataset.mapQuery){
+        const placeName = li.querySelector('.place').textContent.trim();
+        const q = window.prompt('地図で検索する場所名・住所を入力してください', placeName);
+        if(!q || !q.trim()) return;
+        li.dataset.mapQuery = q.trim();
+        mapBtn.innerHTML = ICON_PIN + '地図';
+        editMapBtn.style.display = '';
+      }
+      setMap(li.dataset.mapQuery, li.querySelector('.place').textContent.trim());
+      mapbox.scrollIntoView({behavior:'smooth', block:'center'});
+    });
+
+    editMapBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const q = window.prompt('地図の検索キーワードを変更します（空にして送信すると地図を外します）', li.dataset.mapQuery);
+      if(q === null) return;
+      if(q.trim()){
+        li.dataset.mapQuery = q.trim();
+        setMap(li.dataset.mapQuery, li.querySelector('.place').textContent.trim());
+      } else {
+        li.dataset.mapQuery = '';
+        mapBtn.innerHTML = ICON_PIN + '地図を追加';
+        editMapBtn.style.display = 'none';
+      }
+    });
+    li.querySelector('.btn-up').addEventListener('click', () => {
+      const prev = li.previousElementSibling;
+      if(prev){ ul.insertBefore(li, prev); refreshOrderButtons(); }
+    });
+    li.querySelector('.btn-down').addEventListener('click', () => {
+      const next = li.nextElementSibling;
+      if(next){ ul.insertBefore(next, li); refreshOrderButtons(); }
+    });
+    li.querySelector('.btn-del').addEventListener('click', () => {
+      li.remove();
+      refreshOrderButtons();
+    });
+    ul.appendChild(li);
+    refreshOrderButtons();
+  }
+
+  day.events.forEach(addEventRow);
+
+  const addBtn = document.createElement('button');
+  addBtn.className = 'add-row';
+  addBtn.innerHTML = ICON_PLUS + ' 予定を追加';
+  addBtn.addEventListener('click', () => {
+    addEventRow({time:'00:00', place:'新しい予定', memo:''});
+  });
+  panel.appendChild(addBtn);
+  panel.appendChild(mapbox);
+
+  daysEl.appendChild(panel);
+});
+
+function showDay(idx){
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', i===idx));
+  document.querySelectorAll('.day').forEach((p,i) => p.classList.toggle('active', i===idx));
+}
+</script>
+
+</body>
+</html>
